@@ -7,12 +7,13 @@
     It is built to work with version 1.12 and above
 .NOTES  
     File Name    : PSPHPIPAM.psm1
-    Author       : yoke88 yoke-msn@Hotmail.com
-    Requires     : PowerShell V3
+    Author       : tfiska tfiska@gmail.com
+    Requires     : PowerShell V5
 #>
 
 # file path in linux is case sensive,make sure 
 $FunctionFolder = join-path -path $PSScriptRoot -ChildPath "Functions"
+
 if (test-path $FunctionFolder) {
     Get-ChildItem $FunctionFolder -Filter *.ps1 -Recurse -Exclude "*.Tests.ps1", "*.tests.ps1" | Select-Object -Expand FullName | ForEach-Object {
         $ScriptPath = $_
