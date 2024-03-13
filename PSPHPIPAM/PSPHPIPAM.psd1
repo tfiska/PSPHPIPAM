@@ -12,25 +12,25 @@
 RootModule = 'PSPHPIPAM.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.3.0'
+ModuleVersion = '2.0.01'
 
 # ID used to uniquely identify this module
-GUID = '7facf42f-dc67-4408-86eb-859e6b82e34e'
+GUID = '1fb0a864-faef-486e-ada8-b8e5ddaa3656'
 
 # Author of this module
-Author = 'yoke88'
+Author = 'tfiska'
 
 # Company or vendor of this module
 CompanyName = ''
 
 # Copyright statement for this module
-Copyright = '(c) 2016 yoke88. All rights reserved.'
+Copyright = '(c) 2024 tfiska. All rights reserved. forked from yoke88'
 
 # Description of the functionality provided by this module
-Description = 'This module uses the REST API in the PHPIPAM  1.12 to query and manipulate the objects.'
+Description = 'This module uses the REST API in the PHPIPAM 1.5.0 to query and manipulate the objects.'
 
 # Minimum version of the Windows PowerShell engine required by this module
-PowerShellVersion = '3.0'
+PowerShellVersion = '5.1'
 # below only supported when PowerShellVersion=5.1 or above
 # CompatiblePSEditions=@('Desktop','Core')
 
@@ -96,10 +96,10 @@ PrivateData = @{
         Tags = 'Module','PHPAPAM','REST','API','linux', 'Core','Desktop','Windows'
 
         # A URL to the license for this module.
-        LicenseUri = 'https://github.com/yoke88/PSPHPIPAM/blob/master/LICENSE'
+        LicenseUri = 'https://github.com/tfiska/PSPHPIPAM/blob/master/LICENSE'
 
         # A URL to the main website for this project.
-        ProjectUri = 'https://github.com/yoke88/PSPHPIPAM'
+        ProjectUri = 'https://github.com/tfiska/PSPHPIPAM'
 
         # A URL to an icon representing this module.
         # IconUri = ''
