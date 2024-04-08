@@ -33,14 +33,17 @@ function Remove-PhpIpamSection{
             Position=0,
             ParameterSetName="ByName"
         )]
-        [string]$Name
+        [string]$Name,
+        [parameter(ParameterSetName = "ByID",mandatory = $false)]
+        [parameter(ParameterSetName = "ByName",mandatory = $false)]
+        [hashtable]$PhpIpamSession=@{}
     )
     BEGIN{
 
     }
     PROCESS{
         if($PSCmdlet.ParameterSetName -eq 'ByID'){
-            $r=Invoke-PhpIpamExecute -method delete -controller sections -params @{'id'=$id}
+            $r=Invoke-PhpIpamExecute -method delete -controller sections -params @{'id'=$id}  -PhpIpamSession $PhpIpamSession
             if($r -and $r.success){
                 return $true
             }else{
@@ -49,7 +52,7 @@ function Remove-PhpIpamSection{
         }
         if($PSCmdlet.ParameterSetName -eq 'ByName'){
             try{
-                $sections=(Invoke-PhpIpamExecute -method get -controller sections -identifiers @($name) -ErrorAction stop).data
+                $sections=(Invoke-PhpIpamExecute -method get -controller sections -identifiers @($name) -PhpIpamSession $PhpIpamSession -ErrorAction stop).data
                 $sections|foreach-object{
                     Remove-PhpIpamSection -ID $_.id
                 }

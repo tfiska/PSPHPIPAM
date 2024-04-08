@@ -66,9 +66,17 @@ function Invoke-PhpIpamExecute {
         $headers = @{ },
 
         [parameter(mandatory = $false)]
-        $ContentType = $null
+        $ContentType = $null,
+
+        [parameter(mandatory = $false)]
+        [hashtable]$PhpIpamSession=@{}
 
     )
+    if ($PhpIpamSession.Count -ge 0){
+        foreach($key in $PhpIpamSession.Keys){
+            New-Variable -Name $key -Value $($PhpIpamSession[$key]) -Scope 'script'
+        }
+    }
 
     if (!$script:PhpIpamToken -and !$script:PhpipamAppID -and !$script:PhpipamAppKey) {
         throw "No Auth Method exist,please use new-PhpIpamSession command first to specify auth method and infos"
@@ -141,15 +149,23 @@ function Invoke-PhpIpamExecute {
             throw "No AppID and AppKey can be used,please use new-PhpIpamSession command first to check and store AppID and AppKey"
         }
     }
-
+    
+    #if (!$ContentType -or $ContentType -eq "") {$ContentType="application/xml"}
 
     try {
         write-debug "$method uri=$uri"
         write-debug "headers=$($headers|convertto-json -Depth 100)"
         write-debug "contentType=$($contenttype|ConvertTo-Json -Depth 100)"
         write-debug "body=$($params|convertto-json -Depth 100)"
-
-        $r = Invoke-RestMethod -Method $method -Headers $headers  -Uri $uri -body $params -ContentType $ContentType
+        $RestMethodParams=@{}
+        if ($method) {$RestMethodParams.add("Method",$method)}
+        if ($Headers) {$RestMethodParams.add("Headers",$headers)}
+        if ($uri) {$RestMethodParams.add("uri",$uri)}
+        if ($params) {$RestMethodParams.add("body",$params)}
+        if ($ContentType) {$RestMethodParams.add("ContentType",$ContentType)}
+        write-verbose "allparams=$($RestMethodParams|convertto-json -Depth 100)"
+        $r = Invoke-RestMethod @RestMethodParams
+        #$r = Invoke-RestMethod -Method $method -Headers $headers -Uri $uri -body $params -ContentType $ContentType
         if ($r -and $r -is [System.Management.Automation.PSCustomObject]) {
             write-debug "Func Return:`r`n$($r|convertto-json -Depth 100)"
             return $r

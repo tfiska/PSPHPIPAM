@@ -69,7 +69,20 @@ PowerShellVersion = '5.1'
 # NestedModules = @()
 
 # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-FunctionsToExport = @()
+FunctionsToExport = 'Expand-PhpIpamTokenLife', 'get-idear', 'Get-PhpIpamAddress', 
+               'Get-PhpIpamAddresses', 'Get-PhpIpamCustomFields', 
+               'Get-PhpIpamFolders', 'Get-PhpIpamSection', 'Get-PhpIpamSections', 
+               'Get-PhpIpamSubnet', 'Get-PhpIpamSubnetAddressesByID', 
+               'Get-PhpIpamSubnetFirstFreeByID', 'Get-PhpIpamSubnets', 
+               'Get-PhpIpamSubnetsBySectionID', 'Get-PhpIpamSubnetSlavesByID', 
+               'Get-PhpIpamSubnetSlavesRecursiveByID', 
+               'Get-PhpIpamSubnetUsageByID', 'Get-PhpIpamTags', 
+               'Invoke-PhpIpamExecute', 'New-PhpIpamAddress', 'New-PhpIpamSection', 
+               'New-PhpIpamSession', 'New-PhpIpamSubnet', 'Remove-PhpIpamAddress', 
+               'Remove-PhpIpamSection', 'Remove-PhpIpamSession', 
+               'Remove-PhpIpamSubnet', 'Remove-PhpIpamSubnetAddressesBySubnetID', 
+               'set-idear', 'Test-PhpIpamToken', 'Update-PhpIpamAddress', 
+               'Update-PhpIpamSection', 'Update-PhpIpamSubnet'
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
 CmdletsToExport = @()
@@ -78,7 +91,16 @@ CmdletsToExport = @()
 # VariablesToExport = @()
 
 # Aliases to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no aliases to export.
-AliasesToExport = @()
+AliasesToExport = 'Get-PhpIpamAddressByHostname', 'Get-PhpIpamAddressByID', 
+               'Get-PhpIpamAddressByIP', 'Get-PhpIpamAllFolders', 
+               'Get-PhpIpamAllSections', 'Get-PhpIpamAllSubnets', 
+               'Get-PhpIpamAllTags', 'Get-PhpIpamCustom_Fields', 
+               'Get-PhpIpamSectionByID', 'Get-PhpIpamSectionByName', 
+               'get-PhpIpamSubnetByCIDR', 'Get-PhpIpamSubnetByID', 
+               'Get-PhpIpamSubnetFirst_FreeByID', 
+               'Get-PhpIpamSubnetSlaves_RecursiveByID', 
+               'Remove-PhpIpamSubnetAllAddressBySubnetID', 
+               'Remove-PhpIpamSubnetByID', 'Update-PhpIpamAddressByID'
 
 # DSC resources to export from this module
 # DscResourcesToExport = @()

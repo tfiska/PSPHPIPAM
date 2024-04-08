@@ -34,7 +34,10 @@ function Get-PhpIpamSubnet{
             ParameterSetName="ByCIDR",
             HelpMessage="CIDR Can be like: 192.168.9.0/23 "
             )]
-        [string]$CIDR
+        [string]$CIDR,
+        [parameter(ParameterSetName = "ByID",mandatory = $false)]
+        [parameter(ParameterSetName = "ByCIDR",mandatory = $false)]
+        [hashtable]$PhpIpamSession=@{}
     )
 
     begin{
@@ -42,11 +45,11 @@ function Get-PhpIpamSubnet{
     }
     process{
         if($PSCmdlet.ParameterSetName -eq 'ByID'){
-            $r=Invoke-PhpIpamExecute -method get -controller subnets -identifiers @($ID)
+            $r=Invoke-PhpIpamExecute -method get -controller subnets -identifiers @($ID) -PhpIpamSession $PhpIpamSession
         }
 
         if($PSCmdlet.ParameterSetName -eq 'ByCIDR'){
-            $r=Invoke-PhpIpamExecute -method get -controller subnets -identifiers @('cidr',$CIDR)
+            $r=Invoke-PhpIpamExecute -method get -controller subnets -identifiers @('cidr',$CIDR) -PhpIpamSession $PhpIpamSession
         }
 
         Resolve-PhpIpamExecuteResult -result $r

@@ -1,9 +1,11 @@
 function Get-PhpIpamSections{
     [cmdletbinding()]
     param(
-
+        [parameter(mandatory = $false)]
+        [hashtable]$PhpIpamSession=@{}
+    
     )
-    $r=Invoke-PhpIpamExecute -method get -controller sections
+    $r=Invoke-PhpIpamExecute -method get -controller sections  -PhpIpamSession $PhpIpamSession
     Resolve-PhpIpamExecuteResult -result $r
 }
 

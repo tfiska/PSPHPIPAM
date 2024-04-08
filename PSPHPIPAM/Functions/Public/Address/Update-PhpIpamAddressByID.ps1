@@ -28,14 +28,17 @@ function Update-PhpIpamAddress{
                  $True}}
              else{Throw "$_ contains no valid ID"}
             })]
-         $params
+         $params,
+
+         [parameter(mandatory = $false)]
+         [hashtable]$PhpIpamSession=@{}
     )
 
     begin{
 
     }
     process{
-        $r=Invoke-PhpIpamExecute -method patch -controller addresses -identifiers @($params.id) -params $params
+        $r=Invoke-PhpIpamExecute -method patch -controller addresses -identifiers @($params.id) -params $params  -PhpIpamSession $PhpIpamSession
         if($r -and $r.success){
          return Get-PhpIpamAddress -ID $params.id
         }

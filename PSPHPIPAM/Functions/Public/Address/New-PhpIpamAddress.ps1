@@ -20,14 +20,17 @@ function New-PhpIpamAddress{
     [cmdletBinding()]
     Param(
      [parameter(Mandatory=$true,ValueFromPipeline=$true,ValueFromPipelineByPropertyName=$true,Position=0)]
-      $params
+      $params,
+
+      [parameter(mandatory = $false)]
+      [hashtable]$PhpIpamSession=@{}
     )
 
     begin{
 
     }
     process{
-          $r=Invoke-PhpIpamExecute -method post -controller addresses  -params $params
+          $r=Invoke-PhpIpamExecute -method post -controller addresses  -params $params -PhpIpamSession $PhpIpamSession
           if($r -and $r.success){
           return  Get-PhpIpamAddress -ID $r.id
           }else{

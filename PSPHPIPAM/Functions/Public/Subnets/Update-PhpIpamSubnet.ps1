@@ -23,13 +23,15 @@ function Update-PhpIpamSubnet{
     param(
         [parameter(Mandatory=$true,ValueFromPipeline=$true,ValueFromPipelineByPropertyName=$true,Position=0)]
         [validatescript({$_ -is [hashtable] -or $_ -is [psCustomObject]})]
-        $Params=@{}
+        $Params=@{}, 
+        [parameter(mandatory = $false)]
+        [hashtable]$PhpIpamSession=@{}
     )
     BEGIN{
 
     }
     PROCESS{
-        $r=Invoke-PhpIpamExecute -method patch -controller subnets -params $Params
+        $r=Invoke-PhpIpamExecute -method patch -controller subnets -params $Params -PhpIpamSession $PhpIpamSession
         if($r -and $r.success){
             Get-PhpIpamSubnet -id $params['id']
         }else{

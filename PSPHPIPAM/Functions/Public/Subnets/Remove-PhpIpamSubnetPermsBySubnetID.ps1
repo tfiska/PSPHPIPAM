@@ -2,14 +2,16 @@ function Remove-PhpIpamSubnetPermsBySubnetID{
     [cmdletBinding()]
     Param(
          [parameter(Mandatory=$true,ValueFromPipeline=$true,ValueFromPipelineByPropertyName=$true,position=0)]
-         [int]$ID
+         [int]$ID,
+         [parameter(mandatory = $false)]
+         [hashtable]$PhpIpamSession=@{}
     )
 
     begin{
         Write-Verbose $ID
     }
     process{
-        $r=Invoke-PhpIpamExecute -method delete -controller subnets -identifiers @($ID,"permissions")
+        $r=Invoke-PhpIpamExecute -method delete -controller subnets -identifiers @($ID,"permissions") -PhpIpamSession $PhpIpamSession
         if($r -and $r.success){
             return $true
         }else{

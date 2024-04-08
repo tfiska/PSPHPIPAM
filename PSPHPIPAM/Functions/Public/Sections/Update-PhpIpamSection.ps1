@@ -17,15 +17,18 @@ function Update-PhpIpamSection{
     param(
         [parameter(Mandatory=$true,ValueFromPipeline=$true,ValueFromPipelineByPropertyName=$true,Position=0)]
         [validatescript({$_ -is [hashtable] -or $_ -is [psCustomObject]})]
-        $Params=@{}
+        $Params,
+
+        [parameter(mandatory = $false)]
+        [hashtable]$PhpIpamSession=@{}
     )
     BEGIN{
 
     }
     PROCESS{
-        $r=Invoke-PhpIpamExecute -method patch -controller sections -params $Params -ErrorAction stop
+        $r=Invoke-PhpIpamExecute -method patch -controller sections -params $Params -PhpIpamSession $PhpIpamSession -ErrorAction stop
         if($r -and $r.success){
-            Get-PhpIpamSection -ID $Params['id']
+            Get-PhpIpamSection -ID $Params['id'] -PhpIpamSession $PhpIpamSession
         }
     }
     END{

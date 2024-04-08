@@ -22,7 +22,10 @@ function Remove-PhpIpamAddress{
              ValueFromPipelineByPropertyName=$true,
              position=0
          )]
-         [int]$id
+         [int]$id,
+
+         [parameter(mandatory = $false)]
+         [hashtable]$PhpIpamSession=@{}
     )
 
     begin{
@@ -30,7 +33,7 @@ function Remove-PhpIpamAddress{
     }
     process{
         Write-Debug "AddressId=$id"
-        $r=Invoke-PhpIpamExecute -method delete -controller addresses -identifiers @($ID)
+        $r=Invoke-PhpIpamExecute -method delete -controller addresses -identifiers @($ID) -PhpIpamSession $PhpIpamSession
         if($r -and $r.success){
             return $true
         }else{

@@ -7,7 +7,12 @@ function Get-PhpIpamAddress{
          [parameter(Mandatory=$true,ValueFromPipeline=$true,ValueFromPipelineByPropertyName=$true,position=0,ParameterSetName="ByID")]
          [int]$ID,
          [parameter(Mandatory=$true,ValueFromPipeline=$true,ValueFromPipelineByPropertyName=$true,position=0,ParameterSetName="ByHostName")]
-         [string]$HostName
+         [string]$HostName,
+
+         [parameter(mandatory = $false,ValueFromPipeline=$true,ValueFromPipelineByPropertyName=$true,position=0,ParameterSetName="ByHostName")]
+         [parameter(mandatory = $false,ValueFromPipeline=$true,ValueFromPipelineByPropertyName=$true,position=0,ParameterSetName="ByID")]
+         [parameter(mandatory = $false,ValueFromPipeline=$true,ValueFromPipelineByPropertyName=$true,position=0,ParameterSetName="ByIP")]
+         [hashtable]$PhpIpamSession=@{}
 
     )
 
@@ -16,15 +21,15 @@ function Get-PhpIpamAddress{
     }
     process{
             if ($PsCmdlet.ParameterSetName -eq "ByIP"){
-                $r=Invoke-PhpIpamExecute -method get -controller addresses -identifiers @("search",$IP)
+                $r=Invoke-PhpIpamExecute -method get -controller addresses -identifiers @("search",$IP) -PhpIpamSession $PhpIpamSession
             }
 
             if($PsCmdlet.ParameterSetName -eq 'ByID'){
-                $r=Invoke-PhpIpamExecute -method get -controller addresses -identifiers @($ID)
+                $r=Invoke-PhpIpamExecute -method get -controller addresses -identifiers @($ID) -PhpIpamSession $PhpIpamSession
             }
 
             if($PsCmdlet.ParameterSetName -eq 'ByHostName'){
-                $r=Invoke-PhpIpamExecute -method get -controller addresses -identifiers @("search_hostname",$HostName)
+                $r=Invoke-PhpIpamExecute -method get -controller addresses -identifiers @("search_hostname",$HostName) -PhpIpamSession $PhpIpamSession
             }
             Resolve-PhpIpamExecuteResult -result $r
     }

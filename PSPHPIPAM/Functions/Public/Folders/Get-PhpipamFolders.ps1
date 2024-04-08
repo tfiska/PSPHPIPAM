@@ -1,9 +1,10 @@
 function Get-PhpIpamFolders{
     [cmdletbinding()]
     param(
-
+        [parameter(mandatory = $false)]
+        [hashtable]$PhpIpamSession=@{}
     )
-    $r=Invoke-PhpIpamExecute -method get -controller folders
+    $r=Invoke-PhpIpamExecute -method get -controller folders -PhpIpamSession $PhpIpamSession
     Resolve-PhpIpamExecuteResult -result $r
 }
 

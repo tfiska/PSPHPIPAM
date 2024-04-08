@@ -82,7 +82,8 @@ function New-PhpIpamSession {
 
         [parameter(mandatory = $true, ParameterSetName = "UseCredAuth", HelpMessage = "Enter The password of PhpIpam.")]
         [string]$password,
-        [switch]$SkipCertificateCheck
+        [switch]$SkipCertificateCheck,
+        [switch]$ReturnSessionObject
 
     )
 
@@ -112,7 +113,22 @@ function New-PhpIpamSession {
                 $script:PhpIpamToken = $r.data.token
                 $script:PhpIpamTokenExpires = $r.data.expires
                 $script:PhpIpamTokenAuth = $true
-                return $true
+                $script:PhpIpamSession= @{
+                    PhpIpamUsername = $username
+                    PhpIpamPassword = $password
+                    PhpIpamApiUrl = $PhpIpamApiUrl
+                    PhpIpamAppID = $AppID
+                    PhpIpamAppKey = $AppKey
+                    PhpIpamToken = $r.data.token
+                    PhpIpamTokenExpires = $r.data.expires
+                    PhpIpamTokenAuth = $true
+                }
+                
+                if (-not $ReturnSessionObject) {
+                    return ${true}
+                } else {
+                    return [hashtable]$script:PhpIpamSession
+                }
             } else {
                 Write-Error "Something error there"
                 return $false
@@ -140,7 +156,19 @@ function New-PhpIpamSession {
                 $script:PhpIpamTokenExpires = (get-date).AddYears(100)
                 $script:PhpIpamTokenAuth = $true
                 $script:PhpIpamStaticToken = $true
-                return $true
+                $script:PhpIpamSession= @{
+                    PhpIpamApiUrl = $PhpIpamApiUrl
+                    PhpIpamAppID = $AppID
+                    PhpIpamAppKey = $AppKey
+                    PhpIpamToken = $r.data.token
+                    PhpIpamTokenExpires = $r.data.expires
+                    PhpIpamTokenAuth = $true
+                }
+                if (-not $ReturnSessionObject) {
+                    return ${true}
+                } else {
+                    return [hashtable]$script:PhpIpamSession
+                }
             } else {
                 Write-Error "Something error there"
                 return $false
@@ -167,7 +195,16 @@ function New-PhpIpamSession {
                 $script:PhpIpamApiUrl = $PhpIpamApiUrl
                 $script:PhpIpamAppID = $AppID
                 $script:PhpIpamAppKey = $AppKey
-                return $true
+                $script:PhpIpamSession= @{
+                    PhpIpamApiUrl = $PhpIpamApiUrl
+                    PhpIpamAppID = $AppID
+                    PhpIpamAppKey = $AppKey
+                }
+                if (-not $ReturnSessionObject) {
+                    return ${true}
+                } else {
+                    return [hashtable]$script:PhpIpamSession
+                }
             } else {
                 return $false
             }

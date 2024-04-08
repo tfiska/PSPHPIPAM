@@ -19,10 +19,13 @@ function Get-PhpIpamCustomFields{
         [Parameter(Mandatory=$true)]
         [ValidateSet("subnets","addresses","vlans","l2domains")]
         [string[]]
-        $Controllers
+        $Controllers,
+
+        [parameter(mandatory = $false)]
+        [hashtable]$PhpIpamSession=@{}
     )
     $Controller|ForEach-Object{
-        $r=Invoke-PhpIpamExecute -method get -controller $_ -identifiers @('custom_fields')
+        $r=Invoke-PhpIpamExecute -method get -controller $_ -identifiers @('custom_fields') -PhpIpamSession $PhpIpamSession
         Resolve-PhpIpamExecuteResult -result $r
     }
 

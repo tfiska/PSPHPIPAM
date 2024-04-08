@@ -2,14 +2,17 @@ function Get-PhpIpamSubnetAddressesByID{
     [cmdletBinding()]
     Param(
          [parameter(Mandatory=$true,ValueFromPipeline=$true,ValueFromPipelineByPropertyName=$true,position=0)]
-         [int]$ID
+         [int]$ID,
+
+         [parameter(mandatory = $false)]
+         [hashtable]$PhpIpamSession=@{}
     )
 
     begin{
         Write-Verbose $ID
     }
     process{
-        $r=Invoke-PhpIpamExecute -method get -controller subnets -identifiers @($ID,"addresses")
+        $r=Invoke-PhpIpamExecute -method get -controller subnets -identifiers @($ID,"addresses") -PhpIpamSession $PhpIpamSession
         Resolve-PhpIpamExecuteResult -result $r
     }
 

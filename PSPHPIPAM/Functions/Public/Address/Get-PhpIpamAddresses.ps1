@@ -12,7 +12,11 @@ function Get-PhpIpamAddresses{
             ParameterSetName="All"
         )]
         [Boolean]
-        $All=$true
+        $All=$true,
+
+        [Parameter(Mandatory=$false,ParameterSetName="All")]
+        [Parameter(Mandatory=$false,ParameterSetName="ByCIDR")]
+        [hashtable]$PhpIpamSession=@{}
     )
 
     begin{
@@ -26,7 +30,7 @@ function Get-PhpIpamAddresses{
             }
 
             if($ALL){
-                $r=Invoke-PhpIpamExecute -method get -controller addresses
+                $r=Invoke-PhpIpamExecute -method get -controller addresses -PhpIpamSession $PhpIpamSession
                 Resolve-PhpIpamExecuteResult -result $r
             }
     }

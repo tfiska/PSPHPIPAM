@@ -77,7 +77,11 @@ function Get-PhpIpamSection {
             ParameterSetName = "ByID"
         )]
         [ValidateNotNullOrEmpty()]
-        [int]$ID
+        [int]$ID,
+        [parameter(ParameterSetName = "ByID",mandatory = $false)]
+        [parameter(ParameterSetName = "ByName",mandatory = $false)]
+        [hashtable]$PhpIpamSession=@{}
+    
     )
 
     begin {
@@ -85,10 +89,10 @@ function Get-PhpIpamSection {
     }
     process {
         if ($PSCmdlet.ParameterSetName -eq 'ByName') {
-            $r=Invoke-PhpIpamExecute -method get -controller sections -identifiers @($name)
+            $r=Invoke-PhpIpamExecute -method get -controller sections -identifiers @($name) -PhpIpamSession $PhpIpamSession
         }
         if ($PSCmdlet.ParameterSetName -eq 'ByID') {
-            $r=Invoke-PhpIpamExecute -method get -controller sections -identifiers @($ID)
+            $r=Invoke-PhpIpamExecute -method get -controller sections -identifiers @($ID) -PhpIpamSession $PhpIpamSession
         }
         Resolve-PhpIpamExecuteResult -result $r
     }
