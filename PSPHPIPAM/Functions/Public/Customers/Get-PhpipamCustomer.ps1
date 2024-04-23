@@ -67,9 +67,7 @@ function Get-PhpIpamCustomer {
         )]
         [ValidateNotNullOrEmpty()]
         [int]$ID,
-
-        [parameter(mandatory = $false)]
-        [hashtable]$PhpIpamSession=@{}
+        [parameter(mandatory = $false)][hashtable]$PhpIpamSession=@{}
     )
 
     begin {

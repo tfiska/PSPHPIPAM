@@ -33,13 +33,14 @@ function New-PhpIpamSection{
     Param(
         [parameter(Mandatory=$true,ValueFromPipeline=$true,ValueFromPipelineByPropertyName=$true,Position=0)]
         [validateScript({$_ -is [system.collections.hashtable]})]
-        $Params=@{}
+        $Params=@{},
+        [parameter(mandatory = $false)][hashtable]$PhpIpamSession=@{}
     )
     begin{
 
     }
     process{
-        if($(Invoke-PhpIpamExecute -method post -controller sections -params $Params).success){
+        if($(Invoke-PhpIpamExecute -method post -controller sections -params $Params -PhpIpamSession $PhpIpamSession).success){
             if($Params.ContainsKey('name')){
                 Get-PhpIpamSectionByName -Name $Params['name']
             }

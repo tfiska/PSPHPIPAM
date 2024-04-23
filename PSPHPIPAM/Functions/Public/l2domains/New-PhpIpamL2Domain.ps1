@@ -1,16 +1,16 @@
 <#
 .SYNOPSIS
-    Create PhpIpamCustomer
+    Create PhpIpaml2domain
 .DESCRIPTION
-    Create PhpIpamCustomer
+    Create PhpIpaml2domain
 .EXAMPLE
-    # Create an section and get section info using pipeline
-    PS C:\> New-PhpIpamCustomer -Param @{"name"="section3"}|get-PhpIpamCustomer
+    # Create an l2domain and get l2domain info using pipeline
+    PS C:\> New-PhpIpaml2domain -Param @{"name"="l2domain3"}|get-PhpIpaml2domain
 
     id               : 10
-    name             : section3
+    name             : l2domain3
     description      :
-    masterSection    : 0
+    masterl2domain    : 0
     permissions      :
     strictMode       : 1
     subnetOrdering   :
@@ -27,7 +27,7 @@
 .NOTES
     General notes
 #>
-function New-PhpIpamCustomer{
+function New-PhpIpaml2domain{
 
     [cmdletBinding()]
     Param(
@@ -40,12 +40,9 @@ function New-PhpIpamCustomer{
 
     }
     process{
-
-        if($(
-            Invoke-PhpIpamExecute -method post -controller tools -identifiers customers -params $Params -PhpIpamSession $PhpIpamSession
-            ).success){
+        if($(Invoke-PhpIpamExecute -method post -controller l2domains -params $Params -PhpIpamSession $PhpIpamSession).success){
             if($Params.ContainsKey('name')){
-                Get-PhpIpamCustomerByName -Name $Params['name']
+                Get-PhpIpaml2domainByName -Name $Params['name']
             }
         }
     }
@@ -54,4 +51,4 @@ function New-PhpIpamCustomer{
     }
 }
 
-Export-ModuleMember -Function New-PhpIpamCustomer
+Export-ModuleMember -Function New-PhpIpaml2domain

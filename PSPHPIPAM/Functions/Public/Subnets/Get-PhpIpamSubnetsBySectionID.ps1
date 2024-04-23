@@ -9,7 +9,8 @@ function Get-PhpIpamSubnetsBySectionID{
     }
 
     process{
-        $r=Invoke-PhpIpamExecute -method get -controller sections -identifiers @($ID,'subnets')  -PhpIpamSession $PhpIpamSession
+        $r=Invoke-PhpIpamExecute -method get -controller sections -identifiers @($ID,'subnets')  -PhpIpamSession $PhpIpam2Session
+        Invoke-PhpIpamExecute -method get -controller sections -identifiers @(93,'subnets')  -PhpIpamSession $PhpIpamSession
         Resolve-PhpIpamExecuteResult -result $r
     }
 

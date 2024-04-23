@@ -1,16 +1,16 @@
 <#
 .SYNOPSIS
-    Create PhpIpamCustomer
+    Create PhpIpamvrf
 .DESCRIPTION
-    Create PhpIpamCustomer
+    Create PhpIpamvrf
 .EXAMPLE
-    # Create an section and get section info using pipeline
-    PS C:\> New-PhpIpamCustomer -Param @{"name"="section3"}|get-PhpIpamCustomer
+    # Create an vrf and get vrf info using pipeline
+    PS C:\> New-PhpIpamvrf -Param @{"name"="vrf3"}|get-PhpIpamvrf
 
     id               : 10
-    name             : section3
+    name             : vrf3
     description      :
-    masterSection    : 0
+    mastervrf    : 0
     permissions      :
     strictMode       : 1
     subnetOrdering   :
@@ -27,7 +27,7 @@
 .NOTES
     General notes
 #>
-function New-PhpIpamCustomer{
+function New-PhpIpamvrf{
 
     [cmdletBinding()]
     Param(
@@ -40,12 +40,9 @@ function New-PhpIpamCustomer{
 
     }
     process{
-
-        if($(
-            Invoke-PhpIpamExecute -method post -controller tools -identifiers customers -params $Params -PhpIpamSession $PhpIpamSession
-            ).success){
+        if($(Invoke-PhpIpamExecute -method post -controller vrf -params $Params -PhpIpamSession $PhpIpamSession).success){
             if($Params.ContainsKey('name')){
-                Get-PhpIpamCustomerByName -Name $Params['name']
+                Get-PhpIpamvrfByName -Name $Params['name']
             }
         }
     }
@@ -54,4 +51,4 @@ function New-PhpIpamCustomer{
     }
 }
 
-Export-ModuleMember -Function New-PhpIpamCustomer
+Export-ModuleMember -Function New-PhpIpamvrf

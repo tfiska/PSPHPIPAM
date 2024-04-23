@@ -73,6 +73,7 @@ function Invoke-PhpIpamExecute {
 
     )
     if ($PhpIpamSession.Count -ge 0){
+        Remove-PhpIpamSession | Out-Null
         foreach($key in $PhpIpamSession.Keys){
             New-Variable -Name $key -Value $($PhpIpamSession[$key]) -Scope 'script'
         }
@@ -161,10 +162,15 @@ function Invoke-PhpIpamExecute {
         if ($method) {$RestMethodParams.add("Method",$method)}
         if ($Headers) {$RestMethodParams.add("Headers",$headers)}
         if ($uri) {$RestMethodParams.add("uri",$uri)}
-        if ($params) {$RestMethodParams.add("body",$params)}
-        if ($ContentType) {$RestMethodParams.add("ContentType",$ContentType)}
+        if ($params) {if (-not [string]::IsNullOrWhiteSpace($params) -and $params.Count -ge 1 -and $params  -is [psCustomObject]) {$RestMethodParams.add("body",$($params | ConvertTo-Json))}else {$RestMethodParams.add("body",$params)}}
+        if ($ContentType -and -not [string]::IsNullOrWhiteSpace($ContentType)) {$RestMethodParams.add("ContentType",$ContentType)}
         write-verbose "allparams=$($RestMethodParams|convertto-json -Depth 100)"
-        $r = Invoke-RestMethod @RestMethodParams
+        try {
+        $r = Invoke-RestMethod @RestMethodParams 
+        } catch {
+            $RestMethodParams.body=$($params | ConvertTo-Json)
+            $r = Invoke-RestMethod @RestMethodParams
+        }
         #$r = Invoke-RestMethod -Method $method -Headers $headers -Uri $uri -body $params -ContentType $ContentType
         if ($r -and $r -is [System.Management.Automation.PSCustomObject]) {
             write-debug "Func Return:`r`n$($r|convertto-json -Depth 100)"

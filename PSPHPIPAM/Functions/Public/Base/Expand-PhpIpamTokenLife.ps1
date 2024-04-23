@@ -16,13 +16,14 @@
 function Expand-PhpIpamTokenLife {
     [cmdletbinding()]
     param(
-        [switch]$force
+        [switch]$force,
+        [parameter(mandatory = $false)][hashtable]$PhpIpamSession=@{}
     )
     if ($script:PhpIpamTokenAuth) {
         if (!$force) {
             $TokenStatus = test-PhpIpamToken
             if ($Tokenstatus -eq "Valid") {
-                $r = invoke-PHPIpamExecute -method patch -controller user
+                $r = invoke-PHPIpamExecute -method patch -controller user -PhpIpamSession $PhpIpamSession
                 if ($r) {
                     $script:PhpIpamTokenExpires = $r.data.expires
                     return $r.data.expires

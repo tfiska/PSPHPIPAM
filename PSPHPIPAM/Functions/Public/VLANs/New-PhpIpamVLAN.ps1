@@ -1,16 +1,16 @@
 <#
 .SYNOPSIS
-    Create PhpIpamCustomer
+    Create PhpIpamvlan
 .DESCRIPTION
-    Create PhpIpamCustomer
+    Create PhpIpamvlan
 .EXAMPLE
-    # Create an section and get section info using pipeline
-    PS C:\> New-PhpIpamCustomer -Param @{"name"="section3"}|get-PhpIpamCustomer
+    # Create an vlan and get vlan info using pipeline
+    PS C:\> New-PhpIpamvlan -Param @{"name"="vlan3"}|get-PhpIpamvlan
 
     id               : 10
-    name             : section3
+    name             : vlan3
     description      :
-    masterSection    : 0
+    mastervlan    : 0
     permissions      :
     strictMode       : 1
     subnetOrdering   :
@@ -27,7 +27,7 @@
 .NOTES
     General notes
 #>
-function New-PhpIpamCustomer{
+function New-PhpIpamvlan{
 
     [cmdletBinding()]
     Param(
@@ -40,12 +40,9 @@ function New-PhpIpamCustomer{
 
     }
     process{
-
-        if($(
-            Invoke-PhpIpamExecute -method post -controller tools -identifiers customers -params $Params -PhpIpamSession $PhpIpamSession
-            ).success){
+        if($(Invoke-PhpIpamExecute -method post -controller vlans -params $Params -PhpIpamSession $PhpIpamSession).success){
             if($Params.ContainsKey('name')){
-                Get-PhpIpamCustomerByName -Name $Params['name']
+                Get-PhpIpamvlanByName -Name $Params['name']
             }
         }
     }
@@ -54,4 +51,4 @@ function New-PhpIpamCustomer{
     }
 }
 
-Export-ModuleMember -Function New-PhpIpamCustomer
+Export-ModuleMember -Function New-PhpIpamvlan

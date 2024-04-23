@@ -10,6 +10,7 @@ function Remove-PhpIpamSession {
     param(
 
     )
+    $local:VariableNames=@("PhpIpamUsername","PhpIpamPassword","PhpIpamApiUrl","PhpIpamAppID","PhpIpamAppKey","PhpIpamToken","PhpIpamTokenExpires","PhpIpamTokenAuth","PhpIpamStaticToken")
     $script:PhpIpamUsername = $null
     $script:PhpIpamPassword = $null
     $script:PhpIpamApiUrl = $null
@@ -19,6 +20,7 @@ function Remove-PhpIpamSession {
     $script:PhpIpamTokenExpires = $null
     $script:PhpIpamTokenAuth = $null
     $script:PhpIpamStaticToken = $null
+    Get-Variable -Scope script | Where-Object {$_.Name -iin $local:VariableNames} | ForEach-Object {Remove-Variable -Scope script -Name $_.Name}
 
     return $true
 }

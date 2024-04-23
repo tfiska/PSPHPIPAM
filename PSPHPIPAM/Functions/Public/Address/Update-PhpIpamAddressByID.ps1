@@ -38,9 +38,9 @@ function Update-PhpIpamAddress{
 
     }
     process{
-        $r=Invoke-PhpIpamExecute -method patch -controller addresses -identifiers @($params.id) -params $params  -PhpIpamSession $PhpIpamSession
+        $r=Invoke-PhpIpamExecute -method patch -ContentType "application/json" -controller addresses -identifiers @($params.id) -params $params -PhpIpamSession $PhpIpamSession
         if($r -and $r.success){
-         return Get-PhpIpamAddress -ID $params.id
+         return Get-PhpIpamAddress -PhpIpamSession $PhpIpamSession -ID $params.id
         }
     }
 
