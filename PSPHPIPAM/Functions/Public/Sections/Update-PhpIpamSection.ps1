@@ -26,7 +26,7 @@ function Update-PhpIpamSection{
 
     }
     PROCESS{
-        $r=Invoke-PhpIpamExecute -method patch -controller sections -params $Params -PhpIpamSession $PhpIpamSession -ErrorAction stop
+        $r=Invoke-PhpIpamExecute -method patch -ContentType "application/json" -controller sections -params $Params -PhpIpamSession $PhpIpamSession -ErrorAction stop
         if($r -and $r.success){
             Get-PhpIpamSection -ID $Params['id'] -PhpIpamSession $PhpIpamSession
         }

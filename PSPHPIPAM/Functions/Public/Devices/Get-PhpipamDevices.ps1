@@ -1,15 +1,15 @@
-function Get-PhpIpamDevices{
+function Get-PhpIpamdevices{
     [cmdletbinding()]
     param(
         [parameter(mandatory = $false)]
         [hashtable]$PhpIpamSession=@{}
+    
     )
     $r=Invoke-PhpIpamExecute -method get -controller devices  -PhpIpamSession $PhpIpamSession
-    Resolve-PhpIpamExecuteResult -result $r
+    [System.Collections.ArrayList]$PhpIpamdevicesReturnArray=New-Object -TypeName System.Collections.ArrayList
+    Resolve-PhpIpamExecuteResult -result $r | ForEach-Object {$PhpIpamdevicesReturnArray.add($_) | Out-Null}
+    return ,[System.Collections.ArrayList]$PhpIpamdevicesReturnArray
 }
 
-
-
-New-Alias -Name Get-PhpIpamAllDevices -Value Get-PhpIpamDevices
-Export-ModuleMember -Function Get-PhpIpamDevices -Alias Get-PhpIpamAllDevices
-    
+New-Alias -Name Get-PhpIpamAlldevices -Value Get-PhpIpamdevices -Force
+Export-ModuleMember -Function Get-PhpIpamdevices -Alias Get-PhpIpamAlldevices

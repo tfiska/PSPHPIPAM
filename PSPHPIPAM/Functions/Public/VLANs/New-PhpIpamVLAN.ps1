@@ -40,11 +40,11 @@ function New-PhpIpamvlan{
 
     }
     process{
-        if($(Invoke-PhpIpamExecute -method post -controller vlans -params $Params -PhpIpamSession $PhpIpamSession).success){
-            if($Params.ContainsKey('name')){
-                Get-PhpIpamvlanByName -Name $Params['name']
-            }
-        }
+        $r=Invoke-PhpIpamExecute -method post -controller vlans -params $Params -PhpIpamSession $PhpIpamSession
+        if($r.success){
+            Get-PhpIpamvlanByID -id $r.id -PhpIpamSession $PhpIpamSession
+        }else {return $r}
+        
     }
     end{
 

@@ -40,10 +40,10 @@ function New-PhpIpaml2domain{
 
     }
     process{
-        if($(Invoke-PhpIpamExecute -method post -controller l2domains -params $Params -PhpIpamSession $PhpIpamSession).success){
-            if($Params.ContainsKey('name')){
-                Get-PhpIpaml2domainByName -Name $Params['name']
-            }
+        $r=Invoke-PhpIpamExecute -method post -controller l2domains -params $Params -PhpIpamSession $PhpIpamSession
+        if($r.success){
+            Get-PhpIpaml2domain -PhpIpamSession $PhpIpamSession -ID $r.id
+            
         }
     }
     end{

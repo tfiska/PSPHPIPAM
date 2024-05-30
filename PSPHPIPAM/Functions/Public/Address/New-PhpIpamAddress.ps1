@@ -30,11 +30,14 @@ function New-PhpIpamAddress{
 
     }
     process{
-          $r=Invoke-PhpIpamExecute -method post -controller addresses  -params $params -PhpIpamSession $PhpIpamSession
+          $r=Invoke-PhpIpamExecute -PhpIpamSession $PhpIpamSession -method post -controller addresses -ContentType "application/json"  -params $params
           if($r -and $r.success){
-          return  Get-PhpIpamAddress -ID $r.id
+          return  Get-PhpIpamAddress -PhpIpamSession $PhpIpamSession -ID $r.id
           }else{
-            Write-Error $r
+            write-information "Params = $($($params | ConvertTo-Json )  -replace '(^\s+|\s+$)','' -replace '\s+',' ')" 
+            if ($r){
+              Write-Error $r
+            }
           }
     }
 

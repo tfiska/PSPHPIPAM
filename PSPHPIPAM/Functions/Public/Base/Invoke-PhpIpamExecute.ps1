@@ -87,7 +87,7 @@ function Invoke-PhpIpamExecute {
 
     # lowercase controller
     $controller = $controller.ToLower()
-    if ($params -is [psCustomObject]) {
+    if ($params -isnot [hashtable]) {
         $params = $params | ConvertTo-HashtableFromPsCustomObject
     }
 
@@ -165,12 +165,15 @@ function Invoke-PhpIpamExecute {
         if ($params) {if (-not [string]::IsNullOrWhiteSpace($params) -and $params.Count -ge 1 -and $params  -is [psCustomObject]) {$RestMethodParams.add("body",$($params | ConvertTo-Json))}else {$RestMethodParams.add("body",$params)}}
         if ($ContentType -and -not [string]::IsNullOrWhiteSpace($ContentType)) {$RestMethodParams.add("ContentType",$ContentType)}
         write-verbose "allparams=$($RestMethodParams|convertto-json -Depth 100)"
+        $OldErrorPrefs=$ErrorActionPreference
+        $ErrorActionPreference='SilentlyContinue'
         try {
         $r = Invoke-RestMethod @RestMethodParams 
         } catch {
             $RestMethodParams.body=$($params | ConvertTo-Json)
             $r = Invoke-RestMethod @RestMethodParams
         }
+        $ErrorActionPreference=$OldErrorPrefs
         #$r = Invoke-RestMethod -Method $method -Headers $headers -Uri $uri -body $params -ContentType $ContentType
         if ($r -and $r -is [System.Management.Automation.PSCustomObject]) {
             write-debug "Func Return:`r`n$($r|convertto-json -Depth 100)"

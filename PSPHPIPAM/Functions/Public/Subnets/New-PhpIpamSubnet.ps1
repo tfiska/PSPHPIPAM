@@ -19,18 +19,18 @@ function New-PhpIpamSubnet {
     Param(
         [parameter(Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true, Position = 0)]
         [validateScript( { $_ -is [system.collections.hashtable] })]
-        $Params = @{ },
+        $Params,
         [parameter(mandatory = $false)][hashtable]$PhpIpamSession=@{}
     )
     begin {
 
     }
     process {
-        $r = Invoke-PhpIpamExecute -method post -controller subnets -params $Params -PhpIpamSession $PhpIpamSession
+        $r = Invoke-PhpIpamExecute -method post -ContentType "application/json" -controller subnets -params $Params -PhpIpamSession $PhpIpamSession
 
         if ($r -and $r.success) {
             if ($r.id) {
-                Get-PhpIpamSubnetByID -id $r.id
+                Get-PhpIpamSubnetByID -id $r.id  -PhpIpamSession $PhpIpamSession
             }
         } else {
             Write-Error $r

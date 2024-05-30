@@ -1,8 +1,8 @@
 
 #In Foldername to copy from - related to script location ie "PSPHPIPAM\Functions\Public\Users"
-$IN="PSPHPIPAM\Functions\Public\Sections"
+$IN="PSPHPIPAM\Functions\Public\Locations"
 #Object name (without the plural ending "s")
-$NewObjectName="L2Domain"
+$NewObjectName="Device_type"
 
 $scriptPath = split-path -parent $MyInvocation.MyCommand.Definition
 $INFolder="$scriptPath\$IN"

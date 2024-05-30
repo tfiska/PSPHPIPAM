@@ -34,7 +34,7 @@ function Remove-PhpIpamSubnet {
         Write-Verbose $ID
     }
     process {
-        $r = Invoke-PhpIpamExecute -method delete -controller subnets -identifiers @($ID) -PhpIpamSession $PhpIpamSession
+        $r = Invoke-PhpIpamExecute -method delete -ContentType "application/json" -controller subnets -identifiers @($ID) -PhpIpamSession $PhpIpamSession
 
         if ($r -and $r.success) {
             return $true

@@ -38,22 +38,29 @@ function Update-PhpIpamSubnet{
         $removefields=@("editDate")
         $identifiers=@("subnets")
         if($PSCmdlet.ParameterSetName -eq 'Multiparam'){
-            $changeObject=$Params  | ConvertTo-Json | ConvertFrom-Json
-            $changeObject.psobject.Properties.name | ForEach-Object {
-                if (-not $changeObject.$_){$changeObject.PSObject.Properties.remove($_)
-                }elseif ($_ -in $removefields){$changeObject.PSObject.Properties.remove($_)
-                }elseif ($changeObject.$_[0] -is [psCustomObject]) {
-                    $changeObject.$_='{' + $($(foreach ($obj in $changeObject.$_){($obj.psobject.properties| Where-Object {$_.value -match "^[\d\.]+$"} | ForEach-Object {$_.Value}) -join ":" } ) -join "," ) + '}'
+            #$changeObject=$Params  | ConvertTo-Json | ConvertFrom-Json
+            $changeObject=$Params
+            if ($changeObject -is [PSCustomObject]){
+                $changeObject.psobject.Properties.name | ForEach-Object {
+                    if (-not $changeObject.$_){$changeObject.PSObject.Properties.remove($_)
+                    }elseif ($_ -in $removefields){$changeObject.PSObject.Properties.remove($_)
+                    }elseif ($changeObject.$_[0] -is [psCustomObject]) {
+                        $changeObject.$_='{' + $($(foreach ($obj in $changeObject.$_){($obj.psobject.properties| Where-Object {$_.value -match "^[\d\.]+$"} | ForEach-Object {$_.Value}) -join ":" } ) -join "," ) + '}'
+                    }
+                    
                 }
-                
-            }
-            $ID=$changeObject.id
-            $identifiers=[Int64]$ID
-            if ($changeObject -is [hashtable]){
+                $ID=$changeObject.id
+                $identifiers=[Int64]$ID
+            
+            }elseif ($changeObject -is [hashtable]){
+                $Loops=$changeObject.keys  | ConvertTo-Json -depth 100 | ConvertFrom-Json
+                $Loops | ForEach-Object {
+                    if (-not $changeObject.$_){$changeObject.Remove($_)}
+                    elseif ($_ -in $removefields){$changeObject.Remove($_)}
+                }
+                $ID=$changeObject.id
+                $identifiers=[Int64]$ID
                 $changeObject.remove("id")
-            }
-            else {
-                $changeObject.PSObject.Properties.remove("id")
             }
             if ($changeObject.location -and $changeObject.location.id){$changeObject.location=$changeObject.location.id}
         }
@@ -68,7 +75,7 @@ function Update-PhpIpamSubnet{
     }
     PROCESS{
         if($PSCmdlet.ParameterSetName -eq 'Multiparam'){
-            $r=Invoke-PhpIpamExecute -method patch -ContentType "application/json" -controller subnets -identifiers $ID -params $changeObject -PhpIpamSession $PhpIpamSession
+            $r=Invoke-PhpIpamExecute -method patch -ContentType "application/json;charset=UTF-8" -controller subnets -identifiers $ID -params $changeObject -PhpIpamSession $PhpIpamSession
          
         }elseif($PSCmdlet.ParameterSetName -eq 'Singelparam'){
             $hash=@{
@@ -86,6 +93,7 @@ function Update-PhpIpamSubnet{
             $r=Get-PhpIpamSubnet -PhpIpamSession $PhpIpamSession -id $ID
         }else{
             Write-Error $r
+            $r=""
         }
     }
     END{

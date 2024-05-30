@@ -43,7 +43,7 @@ function Remove-PhpIpamSection{
     }
     PROCESS{
         if($PSCmdlet.ParameterSetName -eq 'ByID'){
-            $r=Invoke-PhpIpamExecute -method delete -controller sections -params @{'id'=$id}  -PhpIpamSession $PhpIpamSession
+            $r=Invoke-PhpIpamExecute -method delete -ContentType "application/json" -controller sections -params @{'id'=$id}  -PhpIpamSession $PhpIpamSession
             if($r -and $r.success){
                 return $true
             }else{

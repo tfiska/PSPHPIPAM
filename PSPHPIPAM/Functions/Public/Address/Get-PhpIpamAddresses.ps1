@@ -24,8 +24,8 @@ function Get-PhpIpamAddresses{
     }
     process{
             if ($PsCmdlet.ParameterSetName -eq "ByCIDR"){
-                get-PhpIpamSubnetByCIDR -CIDR $CIDR|foreach-object{
-                    Get-PhpIpamSubnetAddressesByID -ID $_.id
+                get-PhpIpamSubnetByCIDR -PhpIpamSession $PhpIpamSession -CIDR $CIDR|foreach-object{
+                    Get-PhpIpamSubnetAddressesByID -PhpIpamSession $PhpIpamSession -ID $_.id 
                 }
             }
 

@@ -1,16 +1,16 @@
 <#
 .SYNOPSIS
-    Create PhpIpamvrf
+    Create PhpIpamdevice
 .DESCRIPTION
-    Create PhpIpamvrf
+    Create PhpIpamdevice
 .EXAMPLE
-    # Create an vrf and get vrf info using pipeline
-    PS C:\> New-PhpIpamvrf -Param @{"name"="vrf3"}|get-PhpIpamvrf
+    # Create an device and get device info using pipeline
+    PS C:\> New-PhpIpamdevice -Param @{"name"="device3"}|get-PhpIpamdevice
 
     id               : 10
-    name             : vrf3
+    name             : device3
     description      :
-    mastervrf    : 0
+    masterdevice    : 0
     permissions      :
     strictMode       : 1
     subnetOrdering   :
@@ -27,7 +27,7 @@
 .NOTES
     General notes
 #>
-function New-PhpIpamvrf{
+function New-PhpIpamdevice{
 
     [cmdletBinding()]
     Param(
@@ -40,13 +40,9 @@ function New-PhpIpamvrf{
 
     }
     process{
-        $r = $(Invoke-PhpIpamExecute -method post -ContentType "application/json"  -controller vrf -params $Params -PhpIpamSession $PhpIpamSession)
-        if ($r -and $r.success) {
-            if ($r.id) {
-                Get-PhpIpamvrfByID -id $r.id  -PhpIpamSession $PhpIpamSession
-            }
-        } else {
-            Write-Error $r
+        $r=Invoke-PhpIpamExecute -method post -controller devices -params $Params -PhpIpamSession $PhpIpamSession
+        if($r.success){
+                Get-PhpIpamdeviceByID -id $r.id -PhpIpamSession $PhpIpamSession
         }
     }
     end{
@@ -54,4 +50,4 @@ function New-PhpIpamvrf{
     }
 }
 
-Export-ModuleMember -Function New-PhpIpamvrf
+Export-ModuleMember -Function New-PhpIpamdevice

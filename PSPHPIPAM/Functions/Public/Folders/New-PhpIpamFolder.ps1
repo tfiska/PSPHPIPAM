@@ -1,16 +1,16 @@
 <#
 .SYNOPSIS
-    Create PhpIpamvrf
+    Create PhpIpamfolder
 .DESCRIPTION
-    Create PhpIpamvrf
+    Create PhpIpamfolder
 .EXAMPLE
-    # Create an vrf and get vrf info using pipeline
-    PS C:\> New-PhpIpamvrf -Param @{"name"="vrf3"}|get-PhpIpamvrf
+    # Create an folder and get folder info using pipeline
+    PS C:\> New-PhpIpamfolder -Param @{"name"="folder3"}|get-PhpIpamfolder
 
     id               : 10
-    name             : vrf3
+    name             : folder3
     description      :
-    mastervrf    : 0
+    masterfolder    : 0
     permissions      :
     strictMode       : 1
     subnetOrdering   :
@@ -27,7 +27,7 @@
 .NOTES
     General notes
 #>
-function New-PhpIpamvrf{
+function New-PhpIpamfolder{
 
     [cmdletBinding()]
     Param(
@@ -37,21 +37,19 @@ function New-PhpIpamvrf{
         [parameter(mandatory = $false)][hashtable]$PhpIpamSession=@{}
     )
     begin{
+        if ( -not $Params.isFolder) {$Params.Add("isFolder",1)}
 
     }
     process{
-        $r = $(Invoke-PhpIpamExecute -method post -ContentType "application/json"  -controller vrf -params $Params -PhpIpamSession $PhpIpamSession)
-        if ($r -and $r.success) {
-            if ($r.id) {
-                Get-PhpIpamvrfByID -id $r.id  -PhpIpamSession $PhpIpamSession
-            }
-        } else {
-            Write-Error $r
-        }
+        $r=$(Invoke-PhpIpamExecute -method post -ContentType "application/json" -controller folders -params $Params -PhpIpamSession $PhpIpamSession)
+        if($r -and $r.success -and $r.id){
+            Get-PhpIpamfolderByID -id $r.id -PhpIpamSession $PhpIpamSession
+        } else {$r}
+       
     }
     end{
 
     }
 }
 
-Export-ModuleMember -Function New-PhpIpamvrf
+Export-ModuleMember -Function New-PhpIpamfolder
