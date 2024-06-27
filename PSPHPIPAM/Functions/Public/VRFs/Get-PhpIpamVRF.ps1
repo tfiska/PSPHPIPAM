@@ -89,10 +89,10 @@ function Get-PhpIpamvrf {
     }
     process {
         if ($PSCmdlet.ParameterSetName -eq 'ByName') {
-            $r=Invoke-PhpIpamExecute -method get -controller vrf -identifiers @($name) -PhpIpamSession $PhpIpamSession
+            $r=Invoke-PhpIpamExecute -ContentType "application/json" -method get -controller vrf -identifiers @("search",$name) -PhpIpamSession $PhpIpamSession
         }
         if ($PSCmdlet.ParameterSetName -eq 'ByID') {
-            $r=Invoke-PhpIpamExecute -method get -controller vrf -identifiers @($ID) -PhpIpamSession $PhpIpamSession
+            $r=Invoke-PhpIpamExecute -ContentType "application/json" -method get -controller vrf -identifiers @($ID) -PhpIpamSession $PhpIpamSession
         }
         Resolve-PhpIpamExecuteResult -result $r
     }

@@ -40,11 +40,13 @@ function New-PhpIpaml2domain{
 
     }
     process{
-        $r=Invoke-PhpIpamExecute -method post -controller l2domains -params $Params -PhpIpamSession $PhpIpamSession
+        $r=Invoke-PhpIpamExecute -ContentType "application/json" -method post -controller l2domains -PhpIpamSession $PhpIpamSession -params $Params
         if($r.success){
             Get-PhpIpaml2domain -PhpIpamSession $PhpIpamSession -ID $r.id
             
-        }
+        } elseif ([bool]$r) {
+            Write-Error $r
+        } else {Write-Warning "Nothing returned"}
     }
     end{
 

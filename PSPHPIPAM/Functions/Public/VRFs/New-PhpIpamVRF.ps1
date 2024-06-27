@@ -40,14 +40,14 @@ function New-PhpIpamvrf{
 
     }
     process{
-        $r = $(Invoke-PhpIpamExecute -method post -ContentType "application/json"  -controller vrf -params $Params -PhpIpamSession $PhpIpamSession)
+        $r = $(Invoke-PhpIpamExecute -ContentType "application/json" -method post -controller vrf -PhpIpamSession $PhpIpamSession -params $Params)
         if ($r -and $r.success) {
             if ($r.id) {
                 Get-PhpIpamvrfByID -id $r.id  -PhpIpamSession $PhpIpamSession
             }
-        } else {
+        } elseif ($r) {
             Write-Error $r
-        }
+        } else { Write-Error "`$r is empty for params: $(($params | ConvertTo-Json)  -replace '(^\s+|\s+$)','' -replace '\s+',' '  )"}
     }
     end{
 

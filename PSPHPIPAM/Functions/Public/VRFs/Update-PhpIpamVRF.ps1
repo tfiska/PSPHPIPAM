@@ -23,13 +23,14 @@ function Update-PhpIpamvrf{
         [hashtable]$PhpIpamSession=@{}
     )
     BEGIN{
+        if (-not [bool]$Params.id -and [bool]$Params.vrfId -and $Params -is [hashtable]) {$Params.add("id",$Params.vrfId)|out-null}
 
     }
     PROCESS{
         $r=Invoke-PhpIpamExecute -method patch -ContentType "application/json" -controller vrf -params $Params -PhpIpamSession $PhpIpamSession -ErrorAction stop
         if($r -and $r.success){
             Get-PhpIpamvrf -ID $Params['vrfId'] -PhpIpamSession $PhpIpamSession
-        }
+        } elseif($r ) {Write-Error $r}
     }
     END{
 

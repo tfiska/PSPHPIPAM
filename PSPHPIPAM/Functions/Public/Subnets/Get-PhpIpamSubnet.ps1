@@ -51,12 +51,17 @@ function Get-PhpIpamSubnet{
         if($PSCmdlet.ParameterSetName -eq 'ByCIDR'){
             $r=Invoke-PhpIpamExecute -method get -controller subnets -identifiers @('cidr',$CIDR) -PhpIpamSession $PhpIpamSession
         }
+        Write-Verbose "Result = $($($r | ConvertTo-Json )  -replace '(^\s+|\s+$)','' -replace '\s+',' ')" 
+        if ($r.success) {
 
-        Resolve-PhpIpamExecuteResult -result $r
+            $Return = Resolve-PhpIpamExecuteResult -result $r
+        } elseif ($r) {write-error $r} else {Write-Verbose "$(if ($ID){"Subnet with id=$ID"}else {"Subnet with CIDR=$CIDR"} ) got no result"}
+
     }
 
     end{
-
+        #Write-Verbose $Return.GetType()
+        Return $Return
     }
 }
 New-Alias -Name Get-PhpIpamSubnetByID -Value get-PhpIpamSubnet

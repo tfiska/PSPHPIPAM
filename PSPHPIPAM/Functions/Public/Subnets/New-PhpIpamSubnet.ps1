@@ -33,7 +33,10 @@ function New-PhpIpamSubnet {
                 Get-PhpIpamSubnetByID -id $r.id  -PhpIpamSession $PhpIpamSession
             }
         } else {
-            Write-Error $r
+            write-information "Params = $($($params | ConvertTo-Json )  -replace '(^\s+|\s+$)','' -replace '\s+',' ')" 
+            if ([bool]$r){
+              Write-Error $r
+            }
         }
     }
     end {

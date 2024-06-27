@@ -8,6 +8,13 @@ function Resolve-PhpIpamExecuteResult {
     if($result -and $result.success -and $result.data){
         return $result.data
     }else{
-        #Write-Error $r
+    # }elseif($result -and $result.success){
+    #     $result2=New-Object System.Collections.ArrayList
+    #     Return , $result2
+    # }elseif($result){
+    #     Write-Error $result
+    #     Return , $result2
+        
+        #Write-Error $r       return , $result.data
     }
 }

@@ -16,6 +16,7 @@
     General notes
 #>
 function Remove-PhpIpamvrf{
+    [cmdletBinding()]
     Param(
         [parameter(
             Mandatory=$true,
@@ -43,7 +44,7 @@ function Remove-PhpIpamvrf{
     }
     PROCESS{
         if($PSCmdlet.ParameterSetName -eq 'ByID'){
-            $r=Invoke-PhpIpamExecute -method delete -controller vrf -params @{'id'=$id}  -PhpIpamSession $PhpIpamSession
+            $r=Invoke-PhpIpamExecute -PhpIpamSession $PhpIpamSession -method delete -ContentType "application/json"  -controller vrf -identifiers $ID
             if($r -and $r.success){
                 return $true
             }else{
@@ -52,9 +53,9 @@ function Remove-PhpIpamvrf{
         }
         if($PSCmdlet.ParameterSetName -eq 'ByName'){
             try{
-                $vrfs=(Invoke-PhpIpamExecute -method get -controller vrf -identifiers @($name) -PhpIpamSession $PhpIpamSession -ErrorAction stop).data
+                $vrfs=(Invoke-PhpIpamExecute -PhpIpamSession $PhpIpamSession -method get -controller vrf -identifiers @($name) -ErrorAction stop).data
                 $vrfs|foreach-object{
-                    Remove-PhpIpamvrf -ID $_.id
+                    Remove-PhpIpamvrf -PhpIpamSession $PhpIpamSession -ID $_.id
                 }
             }catch{
                 # do nothing ,because if vrf do not exist ,it will cause exception
