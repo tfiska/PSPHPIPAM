@@ -19,11 +19,10 @@
 function New-PhpIpamAddress{
     [cmdletBinding()]
     Param(
-     [parameter(Mandatory=$true,ValueFromPipeline=$true,ValueFromPipelineByPropertyName=$true,Position=0)]
-      $params,
-
-      [parameter(mandatory = $false)]
-      [hashtable]$PhpIpamSession=@{}
+        [parameter(Mandatory=$true,ValueFromPipeline=$true,ValueFromPipelineByPropertyName=$true,Position=0)]$params,
+        [parameter(mandatory = $false)]
+        [hashtable]$PhpIpamSession=@{},
+        [parameter(mandatory = $false)][string]$ContentType="application/json;charset=UTF-8"
     )
 
     begin{
@@ -31,15 +30,14 @@ function New-PhpIpamAddress{
     }
     process{
           Write-Verbose "Params = $($($params | ConvertTo-Json )  -replace '(^\s+|\s+$)','' -replace '\s+',' ')" 
-          $r=Invoke-PhpIpamExecute -ContentType "application/json;charset=UTF-8" -PhpIpamSession $PhpIpamSession -method post -controller addresses  -params $params
+          $r=Invoke-PhpIpamExecute -ContentType "$ContentType" -PhpIpamSession $PhpIpamSession -method post -controller addresses  -params $params
           Write-Verbose "Result = $($($r | ConvertTo-Json )  -replace '(^\s+|\s+$)','' -replace '\s+',' ')" 
           if($r -and $r.success){
-          return  Get-PhpIpamAddress -PhpIpamSession $PhpIpamSession -ID $r.id
-          }else{
-            write-information "Params = $($($params | ConvertTo-Json )  -replace '(^\s+|\s+$)','' -replace '\s+',' ')" 
-            if ($r){
-              Write-Error $r
-            }
+              return  Get-PhpIpamAddress -PhpIpamSession $PhpIpamSession -ID $r.id
+          }elseif ($r){
+              Write-warning "Response : $($($r | ConvertTo-Json )  -replace '(^\s+|\s+$)','' -replace '\s+',' ') Params = $($($params | ConvertTo-Json )  -replace '(^\s+|\s+$)','' -replace '\s+',' ')"
+          } else {
+              write-warning "Empty response: Params = $($($params | ConvertTo-Json )  -replace '(^\s+|\s+$)','' -replace '\s+',' ')"
           }
     }
 

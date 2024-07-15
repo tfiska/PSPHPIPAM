@@ -32,21 +32,22 @@ function New-PhpIpaml2domain{
     [cmdletBinding()]
     Param(
         [parameter(Mandatory=$true,ValueFromPipeline=$true,ValueFromPipelineByPropertyName=$true,Position=0)]
-        [validateScript({$_ -is [system.collections.hashtable]})]
-        $Params=@{},
-        [parameter(mandatory = $false)][hashtable]$PhpIpamSession=@{}
+        [validateScript({$_ -is [system.collections.hashtable]})][hashtable]$Params,
+        [parameter(mandatory = $false)][hashtable]$PhpIpamSession=@{},
+        [parameter(mandatory = $false)][string]$ContentType="application/json;charset=UTF-8"
     )
     begin{
 
     }
     process{
-        $r=Invoke-PhpIpamExecute -ContentType "application/json" -method post -controller l2domains -PhpIpamSession $PhpIpamSession -params $Params
+        $r=Invoke-PhpIpamExecute -ContentType "$ContentType" -method post -controller l2domains -PhpIpamSession $PhpIpamSession -params $Params
         if($r.success){
-            Get-PhpIpaml2domain -PhpIpamSession $PhpIpamSession -ID $r.id
-            
-        } elseif ([bool]$r) {
-            Write-Error $r
-        } else {Write-Warning "Nothing returned"}
+            Get-PhpIpaml2domain -PhpIpamSession $PhpIpamSession -ID $r.id   
+        }elseif ($r){
+            Write-warning "Response : $($($r | ConvertTo-Json )  -replace '(^\s+|\s+$)','' -replace '\s+',' ') Params = $($($params | ConvertTo-Json )  -replace '(^\s+|\s+$)','' -replace '\s+',' ')"
+        } else {
+            write-warning "Empty response: Params = $($($params | ConvertTo-Json )  -replace '(^\s+|\s+$)','' -replace '\s+',' ')"
+        }
     }
     end{
 
