@@ -26,21 +26,23 @@ function New-PhpIpamSubnet {
 
     }
     process {
+        #$Params.masterSubnetId
+        
         $r = Invoke-PhpIpamExecute -method post -ContentType "application/json" -controller subnets -params $Params -PhpIpamSession $PhpIpamSession
 
         if ($r -and $r.success) {
             if ($r.id) {
-                Get-PhpIpamSubnetByID -id $r.id  -PhpIpamSession $PhpIpamSession
+                $ReturnData=Get-PhpIpamSubnetByID -id $r.id  -PhpIpamSession $PhpIpamSession
             }
         } else {
-            write-information "Params = $($($params | ConvertTo-Json )  -replace '(^\s+|\s+$)','' -replace '\s+',' ')" 
+            write-warning "New-PhpIpamSubnet returned : `"$($($r | ConvertTo-Json )  -replace '(^\s+|\s+$)','' -replace '\s+',' ')`" Params = $($($params | ConvertTo-Json )  -replace '(^\s+|\s+$)','' -replace '\s+',' ')" 
             if ([bool]$r){
               Write-Error $r
             }
         }
     }
     end {
-
+        Return $ReturnData
     }
 }
 
