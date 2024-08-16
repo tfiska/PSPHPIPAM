@@ -16,6 +16,7 @@
     General notes
 #>
 function Remove-PhpIpamvlan{
+    [cmdletBinding()]
     Param(
         [parameter(
             Mandatory=$true,
@@ -43,7 +44,7 @@ function Remove-PhpIpamvlan{
     }
     PROCESS{
         if($PSCmdlet.ParameterSetName -eq 'ByID'){
-            $r=Invoke-PhpIpamExecute -method delete -controller vlans -params @{'id'=$id}  -PhpIpamSession $PhpIpamSession
+            $r=Invoke-PhpIpamExecute -ContentType "application/json;charset=UTF-8" -method delete -controller vlans -params @{'id'=$id}  -PhpIpamSession $PhpIpamSession
             if($r -and $r.success){
                 return $true
             }else{

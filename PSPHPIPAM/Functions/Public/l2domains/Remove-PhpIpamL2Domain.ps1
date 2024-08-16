@@ -16,6 +16,7 @@
     General notes
 #>
 function Remove-PhpIpaml2domain{
+    [cmdletBinding()]
     Param(
         [parameter(
             Mandatory=$true,
@@ -43,7 +44,8 @@ function Remove-PhpIpaml2domain{
     }
     PROCESS{
         if($PSCmdlet.ParameterSetName -eq 'ByID'){
-            $r=Invoke-PhpIpamExecute -method delete -controller l2domains -params @{'id'=$id}  -PhpIpamSession $PhpIpamSession
+            #$r=Invoke-PhpIpamExecute -method delete -controller l2domains -params @{'id'=$id} -PhpIpamSession $PhpIpamSession
+            $r=Invoke-PhpIpamExecute -method delete -controller l2domains  -identifiers @($ID) -PhpIpamSession $PhpIpamSession  -ContentType "application/json;charset=UTF-8"
             if($r -and $r.success){
                 return $true
             }else{
@@ -54,7 +56,7 @@ function Remove-PhpIpaml2domain{
             try{
                 $l2domains=(Invoke-PhpIpamExecute -method get -controller l2domains -identifiers @($name) -PhpIpamSession $PhpIpamSession -ErrorAction stop).data
                 $l2domains|foreach-object{
-                    Remove-PhpIpaml2domain -ID $_.id
+                    Remove-PhpIpaml2domain -ID $_.id -PhpIpamSession $PhpIpamSession
                 }
             }catch{
                 # do nothing ,because if l2domain do not exist ,it will cause exception
